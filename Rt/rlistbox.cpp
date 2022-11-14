@@ -1,0 +1,59 @@
+#include "rlistbox.h"
+
+static std::function<void(PROCEDURE_PARAMS)> set_selecion_var() {
+	return [](PROCEDURE_PARAMS) {
+		RListBox *list_box = static_cast<RListBox *>(additional_info[0]);
+		list_box->selection_index = SendMessageA(*list_box->get_window(), LB_GETCURSEL, NULL, NULL);
+		SendMessageA(*list_box->get_window(), LB_GETTEXT, (LPARAM)list_box->selection_index, (WPARAM)list_box->selection.c_str());
+	};
+}
+
+RListBox::RListBox(RWindow &parent_window, Position position, Size size,
+	HMENU menu, long style, long extended_style, void* lpParam)
+	: RWindowContentItem(parent_window, position, size, menu, style, extended_style, lpParam) {
+
+	content_window = std::make_shared<HWND>(
+		CreateWindowExA(extended_style, "ListBox", NULL,
+			WS_CHILD | WS_VISIBLE | LBS_NOTIFY | style, position.x, position.y, size.width, size.height,
+			*parent_window.get_window(), menu, parent_window.get_hInstance(), lpParam)
+		);
+
+	parent_window.get_procedures().push_back(Procedure(set_selecion_var(), WPROCMESSAGE::CMD, MAKEWPARAM((WPARAM)menu, LBN_SELCHANGE), (LPARAM)*content_window, std::vector<void*>({ this })));
+}
+
+void RListBox::add(const std::string &str) const noexcept {
+	SendMessageA(*content_window, LB_ADDSTRING, NULL, (LPARAM)str.c_str());
+}
+
+void RListBox::remove(size_t index) const noexcept {
+	SendMessageA(*content_window, LB_DELETESTRING, index, NULL);
+}
+
+void RListBox::can_drag(bool can) noexcept {
+	_can_drag = can;
+
+
+}
+
+bool RListBox::can_drag() const noexcept {
+	return _can_drag;
+}
+
+size_t RListBox::size() const noexcept {
+	return SendMessageA(*content_window, LB_GETCOUNT, NULL, NULL);
+}
+
+std::string RListBox::get_selection() const noexcept {
+	return selection;
+}
+
+size_t RListBox::get_selection_index() const noexcept {
+	return selection_index;
+}
+
+//std::vector<std::string> RListBox::get_selections() const noexcept {
+//	size_t buffer_size = size();
+//	std::vector<std::string> buffer(buffer_size);
+//	SendMessageA(*content_window, LB_GETSELITEMS, buffer_size, (LPARAM)buffer.data());
+//	return buffer;
+//}

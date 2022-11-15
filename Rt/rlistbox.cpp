@@ -21,6 +21,21 @@ RListBox::RListBox(RWindow &parent_window, Position position, Size size,
 	parent_window.get_procedures().push_back(Procedure(set_selecion_var(), WPROCMESSAGE::CMD, MAKEWPARAM((WPARAM)menu, LBN_SELCHANGE), (LPARAM)*content_window, std::vector<void*>({ this })));
 }
 
+void RListBox::operator=(const RListBox &list) noexcept {
+	content_window = list.content_window;
+	parent_window = list.parent_window;
+	position = list.position;
+	size = list.size;
+	menu = list.menu;
+	style = list.style;
+	extended_style = list.extended_style;
+	lpParam = list.lpParam;
+	_can_drag = list._can_drag;
+	is_multi_select = list.is_multi_select;
+	selection = list.selection;
+	selection_index = list.selection_index;
+}
+
 void RListBox::add(const std::string &str) const noexcept {
 	SendMessageA(*content_window, LB_ADDSTRING, NULL, (LPARAM)str.c_str());
 }
@@ -32,14 +47,19 @@ void RListBox::remove(size_t index) const noexcept {
 void RListBox::can_drag(bool can) noexcept {
 	_can_drag = can;
 
+	if (!_can_drag) {
+		RListBox new_list = RListBox(parent_window, position, size, menu,
+			style, extended_style, lpParam);
 
+		MakeDragList(*new_list.get_window());
+	}
 }
 
 bool RListBox::can_drag() const noexcept {
 	return _can_drag;
 }
 
-size_t RListBox::size() const noexcept {
+size_t RListBox::list_size() const noexcept {
 	return SendMessageA(*content_window, LB_GETCOUNT, NULL, NULL);
 }
 

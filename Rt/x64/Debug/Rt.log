@@ -1,22 +1,6 @@
 ﻿  main.cpp
 C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-  rbutton.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-  rcheckbox.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(36,75): warning C4311: 'type cast': pointer truncation from 'HMENU' to 'int'
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(36,75): warning C4302: 'type cast': truncation from 'HMENU' to 'int'
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(55,75): warning C4311: 'type cast': pointer truncation from 'HMENU' to 'int'
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(55,75): warning C4302: 'type cast': truncation from 'HMENU' to 'int'
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(60,75): warning C4311: 'type cast': pointer truncation from 'HMENU' to 'int'
-C:\Users\Family\source\repos\Rt\Rt\rcheckbox.cpp(60,75): warning C4302: 'type cast': truncation from 'HMENU' to 'int'
   rlistbox.cpp
 C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-  rtextbox.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-  rwindow.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
-  rwindowcontentitem.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
+C:\Users\Family\source\repos\Rt\Rt\rlistbox.cpp(54,3): error C3861: 'MakeDragList': identifier not found
   Generating Code...
-  Rt.vcxproj -> C:\Users\Family\source\repos\Rt\x64\Debug\Rt.exe

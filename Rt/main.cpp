@@ -47,8 +47,6 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	window.get_procedures().push_back(
 		Procedure(std::function<void(PROCEDURE_PARAMS)>(remove_item), WPROCMESSAGE::CMD, MAKEWPARAM(2, BN_CLICKED), NULL, { &list })
 	);
-	
-	
 
 	while (window.is_running()) {
 		window.check_input();

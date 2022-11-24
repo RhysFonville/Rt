@@ -6,10 +6,14 @@
 #include <memory>
 #include "rwindow.h"
 
+#define NULL_STR "\0"
+
 class RWindowContentItem {
 public:
-	RWindowContentItem(RWindow &parent_window, const Position &position,
-		const Size &size, HMENU menu, long style, long extended_style, void* lpParam);
+	RWindowContentItem(RWindow &parent_window, const std::string &class_name, const std::string &window_name, const Position &position,
+		const Size &size, HMENU menu, long style, long extended_style, long default_style, void* lpParam);
+
+	void create_window(bool show_window = false);
 
 	const std::shared_ptr<HWND> & get_window();
 	RWindow & get_parent_window();
@@ -38,11 +42,14 @@ protected:
 	std::shared_ptr<HWND> content_window;
 	RWindow &parent_window;
 
+	std::string class_name;
+	std::string window_name;
 	Position position;
 	Size size;
 	HMENU menu; 
 	long style;
 	long extended_style;
+	long default_style;
 	void* lpParam;
 };
 

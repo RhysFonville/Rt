@@ -1,9 +1,22 @@
 #include "rwindowcontentitem.h"
 
-RWindowContentItem::RWindowContentItem(RWindow &parent_window, const Position &position,
-	const Size &size, HMENU menu, long style, long extended_style, void* lpParam) :
-	parent_window(parent_window), position(position), size(size), menu(menu), style(style),
-	extended_style(extended_style), lpParam(lpParam) { }
+RWindowContentItem::RWindowContentItem(RWindow &parent_window, const std::string &class_name, const std::string &window_name, const Position &position,
+	const Size &size, HMENU menu, long style, long extended_style, long default_style, void* lpParam) :
+	parent_window(parent_window), class_name(class_name), window_name(window_name), position(position), size(size), menu(menu), style(style),
+	extended_style(extended_style), default_style(default_style), lpParam(lpParam) {
+
+	create_window();
+}
+
+void RWindowContentItem::create_window(bool show_window) {
+	content_window = std::make_shared<HWND>(
+	CreateWindowExA(extended_style, class_name.c_str(), window_name.c_str(),
+		default_style | style, position.x, position.y, size.width, size.height,
+		*parent_window.get_window(), menu, parent_window.get_hInstance(), lpParam)
+	);
+	if (show_window)
+		ShowWindow(*content_window, SW_SHOW);
+}
 
 const std::shared_ptr<HWND> & RWindowContentItem::get_window() {
 	return content_window;
@@ -15,6 +28,7 @@ RWindow & RWindowContentItem::get_parent_window() {
 
 void RWindowContentItem::set_parent_window(RWindow &window) {
 	parent_window = window;
+	SetParent(*content_window, *window.get_window());
 }
 
 Position RWindowContentItem::get_position() const noexcept {
@@ -23,6 +37,7 @@ Position RWindowContentItem::get_position() const noexcept {
 
 void RWindowContentItem::set_position(const Position &position) noexcept {
 	SetWindowPos(*content_window, NULL, position.x, position.y, NULL, NULL, SWP_NOSIZE);
+	this->position = position;
 }
 
 Size RWindowContentItem::get_size() const noexcept {
@@ -31,6 +46,7 @@ Size RWindowContentItem::get_size() const noexcept {
 
 void RWindowContentItem::set_size(const Size &size) noexcept {
 	SetWindowPos(*content_window, NULL, NULL, NULL, size.width, size.height, SWP_NOREPOSITION);
+	this->size = size;
 }
 
 HMENU RWindowContentItem::get_menu() const noexcept {
@@ -39,6 +55,7 @@ HMENU RWindowContentItem::get_menu() const noexcept {
 
 void RWindowContentItem::set_menu(HMENU menu) noexcept {
 	SetMenu(*content_window, menu);
+	this->menu = menu;
 }
 
 long RWindowContentItem::get_style() const noexcept {
@@ -46,7 +63,9 @@ long RWindowContentItem::get_style() const noexcept {
 }
 
 void RWindowContentItem::set_style(long style) noexcept {
-	SetWindowLongA(*content_window, GWL_STYLE, style);
+	LONG_PTR style_ptr = SetWindowLongPtrW(*content_window, GWL_STYLE, style);
+	SetWindowPos(*content_window, 0, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_DRAWFRAME | SWP_SHOWWINDOW);
+	this->style = style;
 }
 
 long RWindowContentItem::get_extended_style() const noexcept {
@@ -54,7 +73,9 @@ long RWindowContentItem::get_extended_style() const noexcept {
 }
 
 void RWindowContentItem::set_extended_style(long extended_style) noexcept {
-	SetWindowLongA(*content_window, GWL_EXSTYLE, style);
+	LONG_PTR style_ptr = SetWindowLongPtrW(*content_window, GWL_EXSTYLE, style);
+	SetWindowPos(*content_window, 0, 0, 0, 0, 0, SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE | SWP_DRAWFRAME | SWP_SHOWWINDOW);
+	this->extended_style = extended_style;
 }
 
 void* RWindowContentItem::get_lpParam() const noexcept {

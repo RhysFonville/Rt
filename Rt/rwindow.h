@@ -90,7 +90,7 @@ private:
 };
 
 static void background(RWindow &window, COLORREF color = RGB(255, 255, 255)) {
-	PAINTSTRUCT ps;
+	PAINTSTRUCT ps = { };
 	FillRect(window.get_dc(), &ps.rcPaint, (HBRUSH)color);
 	EndPaint(*window.get_window(), &ps);
 }

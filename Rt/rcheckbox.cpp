@@ -3,15 +3,8 @@
 RCheckbox::RCheckbox(RWindow &parent_window, Position position, Size size,
 	const std::string &checkbox_text, HMENU menu, long style, long extended_style,
 	void* lpParam)
-	: RWindowContentItem(parent_window, position, size, menu, style, extended_style, lpParam),
+	: RWindowContentItem(parent_window, "Button", checkbox_text.c_str(), position, size, menu, style, extended_style, BS_CHECKBOX | WS_CHILD | WS_VISIBLE, lpParam),
 	checked(CheckboxCheckState::Checked) {
-
-	content_window = std::make_shared<HWND>(
-		CreateWindowExA(extended_style, "Button", checkbox_text.c_str(),
-			BS_CHECKBOX | WS_CHILD | WS_VISIBLE | style, position.x, position.y, size.width, size.height,
-			*parent_window.get_window(), menu, parent_window.get_hInstance(), lpParam)
-	);
-	
 	check();
 
 	std::function<void(PROCEDURE_PARAMS)> func = [](PROCEDURE_PARAMS) {
@@ -52,12 +45,12 @@ void RCheckbox::check(CheckboxCheckState new_state) {
 }
 
 void RCheckbox::uncheck() {
-	CheckDlgButton(*parent_window.get_window(), (int)GetMenu(*content_window), BST_UNCHECKED);
+	CheckDlgButton(*parent_window.get_window(), *(int*)GetMenu(*content_window), BST_UNCHECKED);
 	checked = CheckboxCheckState::Unchecked;
 }
 
 void RCheckbox::check_indeterminate() {
-	CheckDlgButton(*parent_window.get_window(), (int)GetMenu(*content_window), BST_INDETERMINATE);
+	CheckDlgButton(*parent_window.get_window(), *(int*)GetMenu(*content_window), BST_INDETERMINATE);
 	checked = CheckboxCheckState::Indeterminate;
 }
 

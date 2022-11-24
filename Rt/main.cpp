@@ -40,6 +40,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	RButton add_item_button(window, { 5, 30 }, { 200, 24 }, "Add Item", (HMENU)1);
 	RButton remove_item_button(window, { 5, 54 }, { 200, 24 }, "Remove Selected Item", (HMENU)2);
 	RListBox list(window, { 5, 90 }, { 200, 250 }, (HMENU)3);
+	list.is_multi_select(true);
 
 	window.get_procedures().push_back(
 		Procedure(std::function<void(PROCEDURE_PARAMS)>(add_item), WPROCMESSAGE::CMD, MAKEWPARAM(1, BN_CLICKED), NULL, { &list, &add_item_text_box })

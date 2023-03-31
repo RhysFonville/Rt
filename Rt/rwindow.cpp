@@ -102,21 +102,3 @@ bool RWindow::is_running() const noexcept {
 void RWindow::is_running(bool running) noexcept {
 	this->running = running;
 }
-
-void RWindow::clear_tab(RWindow &window, Tab &tab) {
-	for (std::shared_ptr<HWND> &child : tab) {
-		ShowWindow(*child, SW_HIDE);
-		background(window);
-	}
-}
-
-void RWindow::show_tab(Tab &tab) {
-	for (std::shared_ptr<HWND> &child : tab) {
-		ShowWindow(*child, SW_SHOW);
-	}
-}
-
-void RWindow::refresh_tab(RWindow &window, Tab &tab) {
-	clear_tab(window, tab);
-	show_tab(tab);
-}

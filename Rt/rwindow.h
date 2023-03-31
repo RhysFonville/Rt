@@ -9,8 +9,6 @@
 #include <functional>
 #include "rconversion.h"
 
-using Tab = std::vector<std::shared_ptr<HWND>>;
-
 namespace WPROCMESSAGE {
 	constexpr int CLOSE = WM_CLOSE;
 	constexpr int PAINT = WM_PAINT;
@@ -72,10 +70,6 @@ public:
 	bool is_running() const noexcept;
 	void is_running(bool running) noexcept;
 
-	void clear_tab(RWindow &window, Tab &tab);
-	void show_tab(Tab &tab);
-	void refresh_tab(RWindow &window, Tab &tab);
-
 private:
 	std::shared_ptr<HWND> window;
 	HDC dc;
@@ -91,7 +85,8 @@ private:
 
 static void background(RWindow &window, COLORREF color = RGB(255, 255, 255)) {
 	PAINTSTRUCT ps = { };
-	FillRect(window.get_dc(), &ps.rcPaint, (HBRUSH)color);
+	HBRUSH brush = CreateSolidBrush(color);
+	FillRect(window.get_dc(), &ps.rcPaint, brush);
 	EndPaint(*window.get_window(), &ps);
 }
 

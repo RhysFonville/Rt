@@ -1,3 +1,2 @@
-﻿  rlistbox.cpp
-C:\Users\Family\source\repos\Rt\Rt\rwindow.h(94,54): warning C4312: 'type cast': conversion from 'COLORREF' to 'HBRUSH' of greater size
+﻿  rcheckbox.cpp
   Rt.vcxproj -> C:\Users\Family\source\repos\Rt\x64\Debug\Rt.exe

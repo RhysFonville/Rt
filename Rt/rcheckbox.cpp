@@ -26,7 +26,7 @@ void RCheckbox::toggle_check() {
 }
 
 void RCheckbox::check() {
-	CheckDlgButton(*parent_window.get_window(), (int)GetMenu(*content_window), BST_CHECKED);
+	CheckDlgButton(*parent_window.get_window(), (int)(long long)GetMenu(*content_window), BST_CHECKED);
 	checked = CheckboxCheckState::Checked;
 }
 

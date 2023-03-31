@@ -43,10 +43,10 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 	list.is_multi_select(true);
 
 	window.get_procedures().push_back(
-		Procedure(std::function<void(PROCEDURE_PARAMS)>(add_item), WPROCMESSAGE::CMD, MAKEWPARAM(1, BN_CLICKED), NULL, { &list, &add_item_text_box })
+		Procedure(add_item, WPROCMESSAGE::CMD, MAKEWPARAM(1, BN_CLICKED), NULL, { &list, &add_item_text_box })
 	);
 	window.get_procedures().push_back(
-		Procedure(std::function<void(PROCEDURE_PARAMS)>(remove_item), WPROCMESSAGE::CMD, MAKEWPARAM(2, BN_CLICKED), NULL, { &list })
+		Procedure(remove_item, WPROCMESSAGE::CMD, MAKEWPARAM(2, BN_CLICKED), NULL, { &list })
 	);
 
 	while (window.is_running()) {

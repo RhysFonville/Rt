@@ -4,6 +4,7 @@
 
 #include <Windows.h>
 #include <memory>
+#include <windowsx.h>
 #include "rwindow.h"
 
 #define NULL_STR "\0"

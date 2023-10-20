@@ -1,59 +1,58 @@
 #include "rcheckbox.h"
 
 RCheckbox::RCheckbox(RWindow &parent_window, Position position, Size size,
-	const std::string &checkbox_text, HMENU menu, long style, long extended_style,
-	void* lpParam)
-	: RWindowContentItem(parent_window, "Button", checkbox_text.c_str(), position, size, menu, style, extended_style, BS_CHECKBOX | WS_CHILD | WS_VISIBLE, lpParam),
-	checked(CheckboxCheckState::Checked) {
-	check();
+	const std::string &checkbox_text, HMENU menu, Type type, long style, long extended_style, void* lpParam)
+	: RButton(parent_window, position, size, checkbox_text.c_str(), menu, style | (long)type | WS_CHILD | WS_VISIBLE | WS_BORDER | WS_TABSTOP | BS_TEXT, extended_style, lpParam),
+	checked(State::Checked) {
 
 	std::function<void(PROCEDURE_PARAMS)> func = [](PROCEDURE_PARAMS) {
-		static_cast<RCheckbox *>(additional_info[0])->toggle_check();
+		static_cast<RCheckbox*>(additional_info[0])->toggle_check();
 	};
 
 	parent_window.get_procedures().push_back(
-		Procedure(func, WPROCMESSAGE::CMD, (WPARAM)menu, (LPARAM)*content_window, { this }));
+		Procedure(func, menu, (int)RButton::Notification::Clicked, { this })
+	);
 }
 
 void RCheckbox::toggle_check() {
-	if (checked == CheckboxCheckState::Checked) {
+	if (checked == State::Checked) {
 		uncheck();
-		checked = CheckboxCheckState::Unchecked;
-	} else if (checked == CheckboxCheckState::Unchecked) {
+		checked = State::Unchecked;
+	} else if (checked == State::Unchecked) {
 		check();
-		checked = CheckboxCheckState::Checked;
+		checked = State::Checked;
 	}
 }
 
-void RCheckbox::check() {
-	CheckDlgButton(*parent_window.get_window(), (int)(long long)GetMenu(*content_window), BST_CHECKED);
-	checked = CheckboxCheckState::Checked;
-}
-
-void RCheckbox::check(CheckboxCheckState new_state) {
+void RCheckbox::check(State new_state) {
 	switch (new_state) {
-		case CheckboxCheckState::Checked:
+		case State::Checked:
 			check();
 			break;
-		case CheckboxCheckState::Unchecked:
+		case State::Unchecked:
 			uncheck();
 			break;
-		case CheckboxCheckState::Indeterminate:
+		case State::Indeterminate:
 			check_indeterminate();
 			break;
 	}
 }
 
+void RCheckbox::check() {
+	Button_SetCheck(*content_window, BST_CHECKED);
+	checked = State::Checked;
+}
+
 void RCheckbox::uncheck() {
-	CheckDlgButton(*parent_window.get_window(), *(int*)GetMenu(*content_window), BST_UNCHECKED);
-	checked = CheckboxCheckState::Unchecked;
+	Button_SetCheck(*content_window, BST_UNCHECKED);
+	checked = State::Unchecked;
 }
 
 void RCheckbox::check_indeterminate() {
-	CheckDlgButton(*parent_window.get_window(), *(int*)GetMenu(*content_window), BST_INDETERMINATE);
-	checked = CheckboxCheckState::Indeterminate;
+	Button_SetCheck(*content_window, BST_INDETERMINATE);
+	checked = State::Indeterminate;
 }
 
-CheckboxCheckState RCheckbox::is_checked() {
+RCheckbox::State RCheckbox::is_checked() {
 	return checked;
 }

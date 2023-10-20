@@ -57,7 +57,7 @@ RWindow::RWindow(HINSTANCE hInstance) {
 void RWindow::set_up_window(Position position, Size size, const std::string &name, long style, HWND parent, long extended_style, HMENU menu, void* lpParam) {
 	HWND hwnd = CreateWindowExW(extended_style, window_class.lpszClassName, string_to_wstring(name).c_str(),
 		style, position.x, position.y,
-		size.width, size.height, parent, menu, hInstance, lpParam);
+		size.x, size.y, parent, menu, hInstance, lpParam);
 
 	window = std::make_shared<HWND>(hwnd);
 	dc = GetDC(*window);

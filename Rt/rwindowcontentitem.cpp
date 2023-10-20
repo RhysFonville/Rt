@@ -11,7 +11,7 @@ RWindowContentItem::RWindowContentItem(RWindow &parent_window, const std::string
 void RWindowContentItem::create_window(bool show_window) {
 	content_window = std::make_shared<HWND>(
 	CreateWindowExA(extended_style, class_name.c_str(), window_name.c_str(),
-		default_style | style, position.x, position.y, size.width, size.height,
+		default_style | style, position.x, position.y, size.x, size.y,
 		*parent_window.get_window(), menu, parent_window.get_hInstance(), lpParam)
 	);
 	if (show_window)
@@ -45,7 +45,7 @@ Size RWindowContentItem::get_size() const noexcept {
 }
 
 void RWindowContentItem::set_size(const Size &size) noexcept {
-	SetWindowPos(*content_window, NULL, NULL, NULL, size.width, size.height, SWP_NOREPOSITION);
+	SetWindowPos(*content_window, NULL, NULL, NULL, size.x, size.y, SWP_NOREPOSITION);
 	this->size = size;
 }
 

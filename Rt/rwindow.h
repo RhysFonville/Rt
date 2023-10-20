@@ -20,14 +20,16 @@ struct Position {
 	int y;
 
 	Position(int x, int y) : x(x), y(y) {  }
+
+	Position operator+(int x) {
+		return { this->x+x, y+x };
+	}
+	Position operator-(int x) {
+		return { this->x-x, y-x };
+	}
 };
 
-struct Size {
-	int width;
-	int height;
-
-	Size(int width, int height) : width(width), height(height) {  }
-};
+using Size = Position;
 
 class RWindow;
 
@@ -38,6 +40,11 @@ struct Procedure {
 		WPARAM wparam, LPARAM lparam, std::vector<void*> additional_info = std::vector<void*>()) :
 		function(function), message(message), wparam(wparam), lparam(lparam),
 		additional_info(additional_info) {  }
+
+	Procedure(std::function<void(PROCEDURE_PARAMS)> function, HMENU hmenu, int wparam_code,
+		std::vector<void*> additional_info = std::vector<void*>()) :
+		function(function), message(WPROCMESSAGE::CMD), wparam(MAKEWPARAM(hmenu, wparam_code)),
+		lparam(NULL), additional_info(additional_info) {  }
 
 	std::function<void(PROCEDURE_PARAMS)> function;
 	int message;
